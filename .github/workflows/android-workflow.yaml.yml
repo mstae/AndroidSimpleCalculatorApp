@@ -1,5 +1,5 @@
 name: CI Workflow
-on: [pull_request]
+on: [push]
 jobs:
   build-and-run-unit-test:
     name: Build and run unit tests
