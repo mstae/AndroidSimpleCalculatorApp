@@ -28,7 +28,7 @@ jobs:
         working-directory: ./SimpleCalculator/starter
 
   # Creating GitHub issue if any unit tests fail
-      - name: Create issue unit test failure
+      - name: Create issue if unit test failure
         if: ${{ failure() }}
         uses: peter-evans/create-issue-from-file@v2
         with: 
