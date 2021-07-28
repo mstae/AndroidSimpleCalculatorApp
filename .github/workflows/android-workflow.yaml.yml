@@ -1,24 +1,33 @@
 name: CI Workflow
 on: [push]
 jobs:
+  # Build and run unit tests
   build-and-run-unit-test:
     name: Build and run unit tests
+  # Configure GitHub Actions Runner OS as Ubuntu on Linux
     runs-on: ubuntu-latest
     steps:
+
+  # Check out repository for workflow access
       - uses: actions/checkout@v1
+
+  # Configuring Java on Ubuntu Runner
       - name: Setup JDK 1.8
         uses: actions/setup-java@v1
         with:
           java-version: 1.8
-        
+  
+  # Change wrapper permissions 
       - name: Change wrapper permissions
         run: chmod +x ./gradlew
         working-directory: ./SimpleCalculator/starter
 
+  # Running gradle command to run unit tests
       - name: Unit tests
         run: ./gradlew testDebugUnitTest
         working-directory: ./SimpleCalculator/starter
 
+  # Creating GitHub issue if any unit tests fail
       - name: Create issue unit test failure
         if: ${{ failure() }}
         uses: peter-evans/create-issue-from-file@v2
@@ -28,6 +37,7 @@ jobs:
           labels: error
           assignees: mstae
 
+  # Configure GitHub Actions Runner OS as mac-os
   build-and-run-ui-test:
     name: Build and run UI tests
     runs-on: macos-latest # Switched to macOS
@@ -44,6 +54,7 @@ jobs:
         run: ./gradlew testDebugUnitTest
         working-directory: ./SimpleCalculator/starter
 
+  # Running UI tests on macos for faster emulator provisioning
       - name: Run instrumentation tests
         uses: reactivecircus/android-emulator-runner@v2
         with:
@@ -56,6 +67,7 @@ jobs:
           script: ./gradlew connectedCheck
           working-directory: ./SimpleCalculator/starter
 
+  # Configure GitHub Actions Runner OS as Ubuntu on Linux
   build-apk:
     name: Generate apk file
     runs-on: ubuntu-latest
@@ -71,11 +83,12 @@ jobs:
       run: chmod +x ./gradlew
       working-directory: ./SimpleCalculator/starter
 
+  # Build APK file
     - name: Generate apk
       run: ./gradlew assembleDebug
       working-directory: ./SimpleCalculator/starter
 
-  # Upload APK Workflow
+   # Configure GitHub Actions Runner OS as Ubuntu on Linux
   upload-apk: 
     name: Upload generated apk file artifact to GitHub & App Center
     runs-on: ubuntu-latest
